@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Velha</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            #canvas {
+                margin: 0 auto;
+                display: block;
+            }
+            #buttons-container {
+                margin: 20px 0 0 0;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="canvas" width="100" height="100"></canvas>
+        <div id="buttons-container">
+            <button id="restart">Restart</button>
+        </div>
+        <script src="velha.js"></script>
+        <script>
+            var elCanvas = document.getElementById('canvas');
+            var btRestart = document.getElementById('restart');
+            
+            var primeiro = 'x';
+            
+            var velha = new Velha(elCanvas, primeiro, 'hard');
+            velha.draw();
+            
+            elCanvas.addEventListener('click', function(e) { 
+                var x;
+                var y;
+                if (e.pageX || e.pageY) { 
+                  x = e.pageX;
+                  y = e.pageY;
+                }
+                else { 
+                  x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft; 
+                  y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop; 
+                } 
+                x -= elCanvas.offsetLeft;
+                y -= elCanvas.offsetTop;
+                
+                if (velha.processClick(x, y) && velha.isGameOver()) {
+                    var resultado = velha.getResultado();
+                    if (resultado !== 'e') {
+                        //alert('"' + resultado.toLocaleUpperCase() + '"' + ' venceu!');
+                        alert('x' === resultado ? "Você venceu!" : "CPU venceu.");
+                    } else {
+                        alert('Empate.');
+                    }
+                    
+                    primeiro = ('x' === primeiro) ? 'o' : 'x';
+                }
+            });
+            
+            btRestart.addEventListener('click', function(e){
+                velha.restart(primeiro);
+            });
+            
+        </script>
+    </body>
+</html>
